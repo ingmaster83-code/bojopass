@@ -275,14 +275,17 @@ def main():
     new_central = [x for x in central_list if x["id"] not in old_central_ids]
     print(f"\n[중앙부처] 신규: {len(new_central)}건 / 기존: {len(old_central_ids)}건")
 
-    # 상세 수집 (신규 + 기존 중 detail 파일 없는 것)
-    for i, item in enumerate(central_list):
-        detail_path = DETAIL_DIR / f"{item['id']}.json"
-        if detail_path.exists() and item["id"] not in {x["id"] for x in new_central}:
-            continue
-        print(f"  [중앙부처 상세 {i+1}/{len(central_list)}] {item['name'][:30]}")
+    # 상세 수집 (신규 우선, detail 파일 없는 것 순서로 최대 200건/회)
+    new_central_ids = {x["id"] for x in new_central}
+    detail_queue = (
+        [x for x in central_list if x["id"] in new_central_ids] +
+        [x for x in central_list if x["id"] not in new_central_ids
+         and not (DETAIL_DIR / f"{x['id']}.json").exists()]
+    )
+    for i, item in enumerate(detail_queue[:200]):
+        print(f"  [중앙부처 상세 {i+1}/{len(detail_queue)}] {item['name'][:30]}")
         detail = fetch_central_detail(item["id"])
-        save_json(detail_path, {**item, **detail})
+        save_json(DETAIL_DIR / f"{item['id']}.json", {**item, **detail})
 
     save_json(DATA_DIR / "central.json", central_list)
     print(f"\n✓ central.json 저장 완료 ({len(central_list)}건)")
@@ -293,13 +296,16 @@ def main():
     new_local = [x for x in local_list if x["id"] not in old_local_ids]
     print(f"\n[지자체] 신규: {len(new_local)}건 / 기존: {len(old_local_ids)}건")
 
-    for i, item in enumerate(local_list):
-        detail_path = DETAIL_DIR / f"{item['id']}.json"
-        if detail_path.exists() and item["id"] not in {x["id"] for x in new_local}:
-            continue
-        print(f"  [지자체 상세 {i+1}/{len(local_list)}] {item['name'][:30]}")
+    new_local_ids = {x["id"] for x in new_local}
+    local_queue = (
+        [x for x in local_list if x["id"] in new_local_ids] +
+        [x for x in local_list if x["id"] not in new_local_ids
+         and not (DETAIL_DIR / f"{x['id']}.json").exists()]
+    )
+    for i, item in enumerate(local_queue[:200]):
+        print(f"  [지자체 상세 {i+1}/{len(local_queue)}] {item['name'][:30]}")
         detail = fetch_local_detail(item["id"])
-        save_json(detail_path, {**item, **detail})
+        save_json(DETAIL_DIR / f"{item['id']}.json", {**item, **detail})
 
     save_json(DATA_DIR / "local.json", local_list)
     print(f"\n✓ local.json 저장 완료 ({len(local_list)}건)")

@@ -487,6 +487,11 @@ def build_category_page(title, description, items, category_type,
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="bojopass">
   <meta property="og:locale" content="ko_KR">
+  <meta property="og:image" content="https://bojopass.kr/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://bojopass.kr/og.png">
   <link rel="canonical" href="https://bojopass.kr/{('대상' if category_type == 'target' else '분야')}/{category_name}.html">
   <link rel="stylesheet" href="{base_path}css/style.css">
 </head>
