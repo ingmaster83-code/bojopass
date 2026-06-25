@@ -679,6 +679,14 @@ def main():
     generate_field_pages(all_items)
     generate_sitemap(all_items)
 
+    # ── docs/data/ 에 JSON 복사 (클라이언트 사이드 로드용)
+    docs_data_dir = DOCS_DIR / "data"
+    docs_data_dir.mkdir(exist_ok=True)
+    import shutil
+    shutil.copy(DATA_DIR / "central.json", docs_data_dir / "central.json")
+    shutil.copy(DATA_DIR / "local.json",   docs_data_dir / "local.json")
+    print(f"✓ docs/data/ JSON 복사 완료")
+
     elapsed = (datetime.now() - start).seconds
     print(f"\n=== 완료: {elapsed}초 소요 ===")
 
