@@ -213,18 +213,17 @@ def parse_conditions(conditions):
             qual.append(f"소득 — 기준 중위소득 {income_pct}% 이하인 가구")
 
         if target_detail and len(target_detail) > 5:
-            # 긴 텍스트는 문장 단위로 쪼개기
-            sentences = re.split(r'[。.]\s*|\n', target_detail)
+            sentences = re.split(r'[\r\n]+|(?<=[가-힣)%])\s*[○◎·•]\s*|[-–—]\s+(?=[가-힣])', target_detail)
             for s in sentences:
-                s = s.strip()
-                if 5 < len(s) < 100:
+                s = re.sub(r'^[○◎·•\-\s]+', '', s).strip()
+                if 5 < len(s) < 150:
                     qual.append(s)
 
         if exc and len(exc) > 5:
-            sentences = re.split(r'[。.]\s*|\n', exc)
+            sentences = re.split(r'[\r\n]+|(?<=[가-힣)%])\s*[○◎·•]\s*|[-–—]\s+(?=[가-힣])', exc)
             for s in sentences:
-                s = s.strip()
-                if 5 < len(s) < 100:
+                s = re.sub(r'^[○◎·•\-\s]+', '', s).strip()
+                if 5 < len(s) < 150:
                     exclude.append(s)
 
     return qual[:6], exclude[:4]
@@ -296,6 +295,17 @@ def build_item(raw, detail=None):
     # 자격 조건
     conditions = item.get("conditions", [])
     item["qual_list"], item["exclude_list"] = parse_conditions(conditions)
+
+    # qual_list 없으면 target_summary 분리해서 사용
+    if not item["qual_list"]:
+        raw_ts = item.get("target_summary", "")
+        if raw_ts:
+            parts = re.split(r'[\r\n]+|(?<=[가-힣)%])\s*[○◎·•]\s*|[-–—]\s+(?=[가-힣])', raw_ts)
+            item["qual_list"] = [
+                re.sub(r'^[○◎·•\-\s]+', '', p).strip()
+                for p in parts
+                if 5 < len(p.strip()) < 150
+            ][:8]
 
     # 서류
     item["doc_list"] = parse_documents(item.get("documents", ""))
