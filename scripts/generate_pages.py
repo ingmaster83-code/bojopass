@@ -687,6 +687,21 @@ def main():
     shutil.copy(DATA_DIR / "local.json",   docs_data_dir / "local.json")
     print(f"✓ docs/data/ JSON 복사 완료")
 
+    # ── 통계 JSON 생성 (이번달 마감 등 사전 계산)
+    this_month_end = [
+        x for x in all_items
+        if x.get("dday_class") in ("badge-dday-danger", "badge-dday-warn")
+    ]
+    stats = {
+        "total":      len(all_items),
+        "central":    len([x for x in all_items if x.get("source") == "central"]),
+        "local":      len([x for x in all_items if x.get("source") == "local"]),
+        "deadline":   len(this_month_end),
+        "active":     len([x for x in all_items if not x.get("is_closed")]),
+    }
+    (docs_data_dir / "stats.json").write_text(json.dumps(stats, ensure_ascii=False), encoding="utf-8")
+    print(f"✓ docs/data/stats.json 생성 (이번달 마감: {stats['deadline']}건)")
+
     elapsed = (datetime.now() - start).seconds
     print(f"\n=== 완료: {elapsed}초 소요 ===")
 

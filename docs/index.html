@@ -338,7 +338,7 @@
     </div>
     <div class="hero-stat">
       <div class="hero-stat-num" id="statDeadline">—</div>
-      <div class="hero-stat-label">이번달 마감</div>
+      <div class="hero-stat-label">신청 가능</div>
     </div>
   </div>
 </section>
@@ -918,24 +918,16 @@ let allItems = [];
 // 데이터 미리 로드
 (async () => {
   try {
-    const [c, l] = await Promise.all([
+    const [c, l, stats] = await Promise.all([
       fetch('data/central.json').then(r => r.ok ? r.json() : []).catch(() => []),
       fetch('data/local.json').then(r => r.ok ? r.json() : []).catch(() => []),
+      fetch('data/stats.json').then(r => r.ok ? r.json() : {}).catch(() => {}),
     ]);
     allItems = [...c, ...l];
-    document.getElementById('statTotal').textContent   = (allItems.length).toLocaleString();
-    document.getElementById('statCentral').textContent = c.length.toLocaleString();
-    document.getElementById('statLocal').textContent   = l.length.toLocaleString();
-    const deadline = allItems.filter(x => {
-      if (!x.apply_end) return false;
-      const s = String(x.apply_end).replace(/[-\.]/g,'').slice(0,8);
-      if (s.length < 8) return false;
-      const d = new Date(+s.slice(0,4), +s.slice(4,6)-1, +s.slice(6,8));
-      const now = new Date(); now.setHours(0,0,0,0);
-      const diff = Math.round((d - now) / 86400000);
-      return diff >= 0 && diff <= 31;
-    }).length;
-    document.getElementById('statDeadline').textContent = deadline.toLocaleString();
+    document.getElementById('statTotal').textContent   = (stats.total   ?? allItems.length).toLocaleString();
+    document.getElementById('statCentral').textContent = (stats.central ?? c.length).toLocaleString();
+    document.getElementById('statLocal').textContent   = (stats.local   ?? l.length).toLocaleString();
+    document.getElementById('statDeadline').textContent = (stats.active ?? 0).toLocaleString();
   } catch(e) {}
 })();
 
