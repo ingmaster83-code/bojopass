@@ -27,7 +27,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: data/
-          key: bojopass-data-${{ runner.os }}
+          key: bojopass-data-v2-${{ runner.os }}-${{ hashFiles('scripts/fetch_data.py') }}
 
       - name: 한글 폰트 설치
         run: sudo apt-get install -y fonts-noto-cjk
