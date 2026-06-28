@@ -129,22 +129,32 @@ def fetch_central_detail(service_id):
     detail = {}
     cond = {}
 
-    # 상세
-    data = get_json(CENTRAL_DETAIL_URL, {"serviceKey": API_KEY, "serviceId": service_id})
+    # 상세 (cond 필터로 서비스ID 정확히 매칭)
+    data = get_json(CENTRAL_DETAIL_URL, {
+        "page": 1, "perPage": 1,
+        "serviceKey": API_KEY,
+        "cond[서비스ID::EQ]": service_id,
+    })
     if data and data.get("data"):
-        d = data["data"][0] if isinstance(data["data"], list) else data["data"]
-        detail = {
-            "apply_detail": d.get("신청방법", ""),
-            "support_detail": d.get("지원내용", ""),
-            "documents": d.get("구비서류", ""),
-            "contact": d.get("문의처", ""),
-            "contact_tel": d.get("대표전화번호", ""),
-            "online_apply_url": d.get("온라인신청사이트URL", ""),
-        }
+        items = data["data"] if isinstance(data["data"], list) else [data["data"]]
+        d = next((x for x in items if str(x.get("서비스ID", "")) == str(service_id)), items[0] if items else None)
+        if d:
+            detail = {
+                "apply_detail": d.get("신청방법", ""),
+                "support_detail": d.get("지원내용", ""),
+                "documents": d.get("구비서류", ""),
+                "contact": d.get("문의처", ""),
+                "contact_tel": d.get("대표전화번호", ""),
+                "online_apply_url": d.get("온라인신청사이트URL", ""),
+            }
     time.sleep(0.5)
 
-    # 지원조건
-    data2 = get_json(CENTRAL_COND_URL, {"serviceKey": API_KEY, "serviceId": service_id})
+    # 지원조건 (cond 필터로 서비스ID 정확히 매칭)
+    data2 = get_json(CENTRAL_COND_URL, {
+        "page": 1, "perPage": 10,
+        "serviceKey": API_KEY,
+        "cond[서비스ID::EQ]": service_id,
+    })
     if data2 and data2.get("data"):
         items = data2["data"] if isinstance(data2["data"], list) else [data2["data"]]
         cond = {
