@@ -326,7 +326,77 @@ def build_item(raw, detail=None):
     # 문장 쉽게
     item["support_detail"] = easy_term(item.get("support_detail") or item.get("amount_summary") or "")
 
+    # SEO: title suffix (금액 키워드 추출)
+    item["title_suffix"] = build_title_suffix(item)
+
+    # SEO: meta description
+    item["meta_description"] = build_meta_description(item)
+
     return item
+
+
+def build_title_suffix(item):
+    """amount_summary에서 핵심 금액 키워드를 추출해 title suffix 생성"""
+    amount = str(item.get("amount_summary") or item.get("support_detail") or "")
+    # 숫자+단위 패턴 (예: 165만원, 최대 330만원, 50,000원)
+    patterns = re.findall(r'(?:최대\s*)?[\d,]+\s*(?:만\s*원|원|만원)', amount)
+    # 중복 제거, 최대 2개
+    seen, unique = set(), []
+    for p in patterns:
+        p = re.sub(r'\s+', '', p)
+        if p not in seen:
+            seen.add(p)
+            unique.append(p)
+        if len(unique) == 2:
+            break
+    if unique:
+        return f" — 최대 {unique[0]}" if '최대' not in unique[0] and len(unique) == 1 else f" — {', '.join(unique)}"
+    return ""
+
+
+def build_meta_description(item):
+    """금액+대상+신청방법을 조합한 자연스러운 meta description 생성 (최대 155자)"""
+    name    = item.get("name", "")
+    dept    = item.get("dept", "")
+    summary = str(item.get("summary") or "").strip()
+    amount  = str(item.get("amount_summary") or item.get("support_detail") or "").strip()
+    target  = str(item.get("target_summary") or "").strip()
+    apply   = item.get("apply_type_label", "")
+    period  = item.get("apply_period", "")
+
+    parts = []
+
+    # 1. summary가 있으면 첫 문장 사용
+    if summary:
+        first = re.split(r'[\r\n。]', summary)[0].strip()
+        first = re.sub(r'^[○◎·•\-\s]+', '', first).strip()
+        if first:
+            parts.append(first)
+
+    # 2. 금액 키워드: amount 첫 줄에서 숫자+단위 포함 문장 추출
+    if amount:
+        first_line = re.split(r'[\r\n]', amount)[0].strip()
+        first_line = re.sub(r'^[○◎·•\-\s]+', '', first_line).strip()
+        if first_line and first_line not in ' '.join(parts):
+            parts.append(first_line)
+
+    # 3. 신청방법 + 기간
+    if apply and period:
+        parts.append(f"{apply} 신청 가능 ({period})")
+    elif apply:
+        parts.append(f"{apply} 신청 가능")
+
+    desc = ' '.join(parts)
+
+    # 155자 초과 시 자르기
+    if len(desc) > 155:
+        desc = desc[:152] + '...'
+
+    # 빈 경우 fallback
+    if not desc:
+        desc = f"{name} 신청자격, 지원금액, 신청방법을 쉽게 정리했습니다. {dept} 지원금 상세 안내."
+
+    return desc
 
 
 def build_faqs(item):

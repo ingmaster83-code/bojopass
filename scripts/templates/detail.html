@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ item.name }} 신청방법 자격 지원금액 2026 | bojopass</title>
-  <meta name="description" content="{{ item.name }} 신청자격, 지원금액, 신청방법을 쉽게 정리했습니다. {{ item.target_summary|truncate(40, True, '') }} 대상 지원금 상세 안내.">
+  <title>{{ item.name }}{{ item.title_suffix }} 신청방법·자격 2026 | bojopass</title>
+  <meta name="description" content="{{ item.meta_description }}">
   <meta name="keywords" content="{{ item.name }} 신청방법, {{ item.name }} 신청자격, {{ item.name }} 지원금액, {{ item.name }} 2026, {{ item.name }} 대상, {{ item.dept }} 지원금">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="bojopass">
-  <meta property="og:title" content="{{ item.name }} 신청방법 자격 지원금액 2026 | bojopass">
-  <meta property="og:description" content="{{ item.summary|truncate(100, True, '...') }}">
+  <meta property="og:title" content="{{ item.name }}{{ item.title_suffix }} 신청방법·자격 2026 | bojopass">
+  <meta property="og:description" content="{{ item.meta_description }}">
   <meta property="og:locale" content="ko_KR">
   <meta property="og:url" content="https://bojopass.kr/jiwon/{{ item.slug }}.html">
   <meta property="og:image" content="https://bojopass.kr/og.png">
@@ -141,7 +141,7 @@
 
     <!-- 신청자격 -->
     <div class="info-card">
-      <h2 class="info-card-title"><span class="info-card-title-icon">✅</span>이런 분들이 받을 수 있어요</h2>
+      <h2 class="info-card-title"><span class="info-card-title-icon">✅</span>{{ item.name }} 신청자격 — 이런 분들이 받을 수 있어요</h2>
       <div class="qual-list">
         {% for cond in item.qual_list %}
         <div class="qual-item">
@@ -172,7 +172,7 @@
 
     <!-- 지원내용 -->
     <div class="info-card">
-      <h2 class="info-card-title"><span class="info-card-title-icon">💰</span>얼마나, 어떻게 받을 수 있나요?</h2>
+      <h2 class="info-card-title"><span class="info-card-title-icon">💰</span>{{ item.name }} 지원금액 — 얼마나 받을 수 있나요?</h2>
       {% if item.support_detail %}
       <div style="font-size:15px;line-height:1.8;color:var(--text-primary);white-space:pre-wrap;">{{ item.support_detail }}</div>
       {% else %}
@@ -193,7 +193,7 @@
     <!-- 신청방법 -->
     {% if item.apply_steps %}
     <div class="info-card">
-      <h2 class="info-card-title"><span class="info-card-title-icon">📝</span>어떻게 신청하나요?</h2>
+      <h2 class="info-card-title"><span class="info-card-title-icon">📝</span>{{ item.name }} 신청방법 — 어떻게 신청하나요?</h2>
       <div class="steps">
         {% for step in item.apply_steps %}
         <div class="step-item">
@@ -208,7 +208,7 @@
     </div>
     {% elif item.apply_detail %}
     <div class="info-card">
-      <h2 class="info-card-title"><span class="info-card-title-icon">📝</span>어떻게 신청하나요?</h2>
+      <h2 class="info-card-title"><span class="info-card-title-icon">📝</span>{{ item.name }} 신청방법 — 어떻게 신청하나요?</h2>
       <div style="font-size:15px;line-height:1.8;color:var(--text-primary);white-space:pre-wrap;">{{ item.apply_detail }}</div>
     </div>
     {% endif %}
