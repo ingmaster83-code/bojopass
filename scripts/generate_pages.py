@@ -552,6 +552,7 @@ def build_category_page(title, description, items, category_type,
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, follow">
   <title>{title} — 신청방법 &amp; 자격 | bojopass</title>
   <meta name="description" content="{description}">
   <meta property="og:type" content="website">
