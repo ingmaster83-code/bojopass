@@ -1,0 +1,31 @@
+{
+  "name": "bojopass",
+  "logo_html": "bojo<span>pass</span>",
+  "domain": "https://bojopass.kr",
+  "author": "bojopass 편집팀",
+  "lang_desc": "정부지원금 가이드",
+  "home_title": "정부지원금 가이드 — 신청 방법과 자격 쉽게 정리 | bojopass",
+  "home_desc": "정부지원금과 보조금을 찾고 신청하는 방법, 소득 기준, 중복 수급, 사기 예방까지. 처음 신청하는 분을 위한 bojopass 가이드입니다.",
+  "home_h1": "지원금 가이드",
+  "home_lead": "정부지원금을 찾는 방법부터 신청 자격, 소득 기준, 주의사항까지 — 처음 신청하는 분이 알아야 할 내용을 차근차근 정리했습니다.",
+  "cta_title": "내게 맞는 지원금 찾아보기",
+  "cta_text": "전국 정부지원금·보조금을 목록으로 모아 보여주는 우아하우스 보조금정보에서 확인할 수 있습니다.",
+  "cta_links": [
+    [
+      "지원금 전체 목록",
+      "https://wooabojopass.wooahouse.com/list.html"
+    ],
+    [
+      "신청 캘린더",
+      "https://wooabojopass.wooahouse.com/calendar.html"
+    ]
+  ],
+  "article_note": "※ 지원금 제도의 대상·금액·신청 기간은 수시로 바뀝니다. 신청 전에는 반드시 <a href=\"https://www.gov.kr\" target=\"_blank\" rel=\"noopener\">정부24</a>, <a href=\"https://www.bokjiro.go.kr\" target=\"_blank\" rel=\"noopener\">복지로</a> 또는 담당 기관의 공식 안내를 확인하세요.",
+  "footer_note": "본 사이트의 글은 일반적인 정보 제공을 위한 것이며, 지원금 신청 전 반드시 정부24·복지로 등 공식 채널과 담당 기관의 안내를 확인하세요.",
+  "naver_verification": "7afcd79d93548b43c77d7273bd621aa16842eafc",
+  "adsense": "ca-pub-6464921081676309",
+  "ga_id": "G-ZX4XBP4RMQ",
+  "promo_text": "전국 정부지원금·보조금을 한눈에 찾아보는 도구가 필요하다면",
+  "promo_link_text": "우아하우스 보조금정보 바로가기 →",
+  "promo_url": "https://wooabojopass.wooahouse.com"
+}
